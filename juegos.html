@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Memoria de Colores</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .container {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .color-box {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #red {
+            background-color: red;
+        }
+
+        #green {
+            background-color: rgb(255, 0, 179);
+        }
+
+        #blue {
+            background-color: blue;
+        }
+
+        #yellow {
+            background-color: rgb(12, 0, 66);
+        }
+
+        .stats {
+            margin-top: 20px;
+        }
+
+        .stats p {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Juego de Memoria de Colores</h1>
+        <div id="game-container">
+            <div class="color-box" id="red" onclick="handleClick('red')"></div>
+            <div class="color-box" id="green" onclick="handleClick('green')"></div>
+            <div class="color-box" id="blue" onclick="handleClick('blue')"></div>
+            <div class="color-box" id="yellow" onclick="handleClick('yellow')"></div>
+        </div>
+        <div class="stats">
+            <p>Nivel: <span id="level">1</span></p>
+            <p>Puntos: <span id="score">0</span></p>
+            <p>Récord: <span id="highscore">0</span></p>
+            <p id="turn">Tu turno</p>
+        </div>
+        <button onclick="startGame()">Comenzar Juego</button>
+    </div>
+    <script>
+        const colors = ['red', 'green', 'blue', 'yellow'];
+        let sequence = [];
+        let playerSequence = [];
+        let level = 1;
+        let score = 0;
+        let highscore = 0;
+
+        function startGame() {
+            sequence = generateSequence(level);
+            playSequence(sequence);
+            document.getElementById('turn').textContent = 'Turno de la computadora';
+        }
+
+        function generateSequence(length) {
+            const sequence = [];
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * 4);
+                sequence.push(colors[randomIndex]);
+            }
+            return sequence;
+        }
+
+        function playSequence(sequence) {
+            let i = 0;
+            const intervalId = setInterval(() => {
+                highlightColor(sequence[i]);
+                i++;
+                if (i >= sequence.length) {
+                    clearInterval(intervalId);
+                    setTimeout(() => {
+                        resetColors();
+                        document.getElementById('turn').textContent = 'Tu turno';
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        function highlightColor(color) {
+            const element = document.getElementById(color);
+            element.style.opacity = 0.5;
+            setTimeout(() => {
+                element.style.opacity = 1;
+            }, 500);
+        }
+
+        function resetColors() {
+            playerSequence = [];
+        }
+
+        function handleClick(color) {
+            if (document.getElementById('turn').textContent !== 'Tu turno') {
+                return;
+            }
+
+            playerSequence.push(color);
+            if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+                gameOver();
+            } else {
+                if (playerSequence.length === sequence.length) {
+                    level++;
+                    score += level * 10;
+                    updateStats();
+                    playerSequence = [];
+                    startGame();
+                }
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('level').textContent = level;
+            document.getElementById('score').textContent = score;
+            if (score > highscore) {
+                highscore = score;
+                document.getElementById('highscore').textContent = highscore;
+            }
+        }
+
+        function gameOver() {
+            alert('¡Error! Juego terminado.');
+            level = 1;
+            score = 0;
+            updateStats();
+            document.getElementById('turn').textContent = 'Tu turno';
+        }
+
+    </script>
+    <script src="script.js"></script>
+
+    </script>
+</body>
+
+</html>
+
+<script>
