@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias sin Internet</title>
+    <style>
+        /* Estilos básicos para la página */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .noticias-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .noticia {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .noticia h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Últimas Noticias</h1>
+    <ul class="noticias-list" id="noticias-list">
+        <!-- Aquí se cargarán las noticias desde el almacenamiento local -->
+    </ul>
+</div>
+
+<script>
+    // Array de noticias (simulado)
+    var noticias = [
+        { titulo: "Título de la Noticia 1", contenido: "Contenido de la Noticia 1" },
+        { titulo: "Título de la Noticia 2", contenido: "Contenido de la Noticia 2" },
+        { titulo: "Título de la Noticia 3", contenido: "Contenido de la Noticia 3" }
+    ];
+
+    // Función para mostrar las noticias en la página
+    function mostrarNoticias() {
+        var noticiasList = document.getElementById('noticias-list');
+        noticiasList.innerHTML = ''; // Limpiar la lista
+
+        noticias.forEach(function(noticia) {
+            var li = document.createElement('li');
+            li.classList.add('noticia');
+
+            var titulo = document.createElement('h2');
+            titulo.textContent = noticia.titulo;
+
+            var contenido = document.createElement('p');
+            contenido.textContent = noticia.contenido;
+
+            li.appendChild(titulo);
+            li.appendChild(contenido);
+
+            noticiasList.appendChild(li);
+        });
+    }
+
+    // Guardar las noticias en el almacenamiento local
+    localStorage.setItem('noticias', JSON.stringify(noticias));
+
+    // Mostrar las noticias al cargar la página
+    mostrarNoticias();
+</script>
+
+</body>
+</html>
